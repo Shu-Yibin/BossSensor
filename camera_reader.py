@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+#import sys
+#sys.path.append('/usr/local/Cellar/opencv3/3.2.0/lib/python2.7/site-packages')
+
 import cv2
 
 from boss_train import Model
@@ -7,7 +10,7 @@ from image_show import show_image
 
 if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
-    cascade_path = "/usr/local/opt/opencv/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml"
+    cascade_path = "/Users/ABin/anaconda/pkgs/opencv3-3.1.0-py35_0/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml"
     model = Model()
     model.load()
     while True:
@@ -27,7 +30,7 @@ if __name__ == '__main__':
             color = (255, 255, 255)  # 白
             for rect in facerect:
                 # 検出した顔を囲む矩形の作成
-                #cv2.rectangle(frame, tuple(rect[0:2]), tuple(rect[0:2] + rect[2:4]), color, thickness=2)
+                cv2.rectangle(frame, tuple(rect[0:2]), tuple(rect[0:2] + rect[2:4]), color, thickness=2)
 
                 x, y = rect[0:2]
                 width, height = rect[2:4]
@@ -36,7 +39,7 @@ if __name__ == '__main__':
                 result = model.predict(image)
                 if result == 0:  # boss
                     print('Boss is approaching')
-                    show_image()
+ #                   show_image()
                 else:
                     print('Not boss')
 
