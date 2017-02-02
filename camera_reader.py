@@ -11,6 +11,7 @@ from image_show import show_image
 if __name__ == '__main__':
     
     i = 1
+    j = 1
     
     cap = cv2.VideoCapture(0)
     cascade_path = "/Users/ABin/anaconda/pkgs/opencv3-3.1.0-py35_0/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml"
@@ -37,8 +38,22 @@ if __name__ == '__main__':
 
                 x, y = rect[0:2]
                 width, height = rect[2:4]
+                
                 image = frame[y - 10: y + height, x: x + width]
+                
+                key = cv2.waitKey(10)
+                if key == ord('b'):     # 当按下"s"键时，将保存当前画面
+                    i_str = str(i)
+                    i = i+1
+                    filepath = './data/boss/screenshot'+i_str+'.jpg'
+                    cv2.imwrite(filepath, image)
+                elif key == ord('o'):     # 当按下"s"键时，将保存当前画面
+                    j_str = str(j)
+                    j = j+1
+                    filepath = './data/other/screenshot'+j_str+'.jpg'
+                    cv2.imwrite(filepath, image)
                 result = model.predict(image)
+                print(result)
                 if result == 0:  # boss
                     print('Boss is approaching')
                     #color = (255, 0, 0)
@@ -50,12 +65,8 @@ if __name__ == '__main__':
                 # show the result
                 cv2.imshow('Sensor',frame)
         key = cv2.waitKey(10)
-        if key == ord('s'):     # 当按下"s"键时，将保存当前画面
-            i_str = str(i)
-            i = i+1
-            filepath = './data/boss/screenshot'+i_str+'.jpg'
-            cv2.imwrite(filepath, image)
-        elif key == ord('q'):   # 当按下"q"键时，将退出循环
+        
+        if key == ord('q'):   # 当按下"q"键时，将退出循环
             break
                 
 
