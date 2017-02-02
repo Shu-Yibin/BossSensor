@@ -9,13 +9,17 @@ from image_show import show_image
 
 
 if __name__ == '__main__':
+    
+    i = 1
+    
     cap = cv2.VideoCapture(0)
     cascade_path = "/Users/ABin/anaconda/pkgs/opencv3-3.1.0-py35_0/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml"
     model = Model()
     model.load()
     while True:
         _, frame = cap.read()
-
+        # show the result
+        cv2.imshow('Sensor',frame)
         # グレースケール変換
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -30,18 +34,32 @@ if __name__ == '__main__':
             color = (255, 255, 255)  # 白
             for rect in facerect:
                 # 検出した顔を囲む矩形の作成
-                cv2.rectangle(frame, tuple(rect[0:2]), tuple(rect[0:2] + rect[2:4]), color, thickness=2)
 
                 x, y = rect[0:2]
                 width, height = rect[2:4]
                 image = frame[y - 10: y + height, x: x + width]
-
                 result = model.predict(image)
                 if result == 0:  # boss
                     print('Boss is approaching')
+                    #color = (255, 0, 0)
  #                   show_image()
                 else:
+                    color = (255, 255, 255)  # 白
                     print('Not boss')
+                cv2.rectangle(frame, tuple(rect[0:2]), tuple(rect[0:2] + rect[2:4]), color, thickness=2)
+                # show the result
+                cv2.imshow('Sensor',frame)
+        key = cv2.waitKey(10)
+        if key == ord('s'):     # 当按下"s"键时，将保存当前画面
+            i_str = str(i)
+            i = i+1
+            filepath = './data/boss/screenshot'+i_str+'.jpg'
+            cv2.imwrite(filepath, image)
+        elif key == ord('q'):   # 当按下"q"键时，将退出循环
+            break
+                
+
+
 
         #10msecキー入力待ち
         k = cv2.waitKey(100)
